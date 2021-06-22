@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/c-bata/go-prompt"
 	"github.com/ethereum/go-ethereum"
@@ -119,6 +120,7 @@ func upgradeArbOS(upgradeFile string, targetMexe string, startMexe *string) erro
 			return err
 		}
 	}
+	time.Sleep(time.Second)
 
 	codeHash, err := arbOwner.GetUploadedCodeHash(&bind.CallOpts{})
 	if err != nil {
