@@ -67,7 +67,7 @@ type upgrade struct {
 }
 
 func upgradeArbOSSimple() error {
-	arbosDirPath, err := arbos.Path()
+	arbosDirPath, err := arbos.Dir()
 	if err != nil {
 		return err
 	}
@@ -78,6 +78,7 @@ func upgradeArbOSSimple() error {
 }
 
 func upgradeArbOS(upgradeFile string, targetMexe string, startMexe *string) error {
+	config.auth.GasPrice = big.NewInt(355800000)
 	targetMach, err := cmachine.New(targetMexe)
 	if err != nil {
 		return err
@@ -109,13 +110,15 @@ func upgradeArbOS(upgradeFile string, targetMexe string, startMexe *string) erro
 		}
 		chunks[len(chunks)-1] += insn
 	}
-
 	arbOwner, err := arboscontracts.NewArbOwner(arbos.ARB_OWNER_ADDRESS, config.client)
 	if err != nil {
 		return err
 	}
+	fmt.Println("Starting code upload")
+
 	tx, err := arbOwner.StartCodeUpload(config.auth)
 	if err != nil {
+		fmt.Println("failed tx", err)
 		return err
 	}
 	if err := waitForTx(tx, "StartCodeUpload"); err != nil {
@@ -144,7 +147,7 @@ func upgradeArbOS(upgradeFile string, targetMexe string, startMexe *string) erro
 
 	fmt.Println("Uploaded code matches")
 
-	_, err = arbOwner.FinishCodeUploadAsArbosUpgrade(config.auth, targetMach.CodePointHash(), startHash)
+	tx, err = arbOwner.FinishCodeUploadAsArbosUpgrade(config.auth, targetMach.CodePointHash(), startHash)
 	if err != nil {
 		return err
 	}
@@ -836,7 +839,7 @@ func run(ctx context.Context) error {
 		return err
 	}
 	fmt.Println("Sending from address", auth.From)
-
+	auth.Context = context.Background()
 	config = &Config{
 		client: client,
 		auth:   auth,
