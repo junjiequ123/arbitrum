@@ -18,6 +18,7 @@ package monitor
 
 import (
 	"context"
+	"github.com/offchainlabs/arbitrum/packages/arb-util/configuration"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -45,7 +46,7 @@ type Monitor struct {
 }
 
 func NewMonitor(dbDir string, contractFile string) (*Monitor, error) {
-	storage, err := cmachine.NewArbStorage(dbDir)
+	storage, err := cmachine.NewArbStorage(dbDir, &configuration.Core{})
 	if err != nil {
 		return nil, err
 	}

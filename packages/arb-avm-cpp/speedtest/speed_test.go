@@ -17,6 +17,7 @@
 package speedtest
 
 import (
+	"github.com/offchainlabs/arbitrum/packages/arb-util/configuration"
 	"io/ioutil"
 	"math/big"
 	"strconv"
@@ -48,7 +49,7 @@ func getInsnMultiplier(b *testing.B, filePath string) uint64 {
 
 func runExecutableFile(b *testing.B, filePath string) {
 	insnMultiplier := getInsnMultiplier(b, filePath)
-	ckp, err := cmachine.NewArbStorage(b.TempDir())
+	ckp, err := cmachine.NewArbStorage(b.TempDir(), &configuration.Core{})
 	if err != nil {
 		b.Fatal(err)
 	}

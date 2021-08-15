@@ -18,6 +18,7 @@ package cmachine
 
 import (
 	"github.com/offchainlabs/arbitrum/packages/arb-util/common"
+	"github.com/offchainlabs/arbitrum/packages/arb-util/configuration"
 	"math/big"
 	"os"
 	"testing"
@@ -36,7 +37,7 @@ func TestExecutionCursor(t *testing.T) {
 		}
 	}()
 
-	arbStorage, err := NewArbStorage(dePath)
+	arbStorage, err := NewArbStorage(dePath, &configuration.Core{})
 	if err != nil {
 		t.Fatal(err)
 	}
